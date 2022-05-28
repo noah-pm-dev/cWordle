@@ -1,6 +1,8 @@
 #! /usr/bin/env -S julia --handle-signals=no
 
-using Printf, Dates
+using Printf, Dates, HTTP
+
+include("getWord.jl")
 
 function matchIndex(num, arr)
 	for i in arr
@@ -86,7 +88,7 @@ for i in letters
 end
 
 
-print("\n\n\n\n\n\n\n\n\u001b7$(join(letters))\u001b[9A\u001b[1F")
+print("\n\n\n\n\n\n\n\n\n$(join(letters))\u001b[1A\u001b[1F\u001b7\u001b[8A\u001b[1F")
 
 
 
@@ -113,7 +115,7 @@ for i in 1:6
 	#println(greenIndex)
 	#sleep(1)
 	wrongPass(input, i)
-	print("\u001b8$(join(letters))\u001b[$(10 - i)F")
+	print("\u001b8$(join(letters))\u001b[$(11 - i)F")
 	#println()
 	global greenIndex = []
 end
@@ -122,12 +124,8 @@ end
 #println(letters)
 
 
-println("\u001b8\u001b[3E")
+println("\u001b8\u001b[4E")
 
 if winStatus == 1
-	println("\u001b[32mYou Win!\u001b[39m")
+	println("\u001b[32m\nYou Win!\u001b[39m")
 end
-#println("\n", indexin(1, greenIndex))
-#println(greenIndex)
-#println("\n", lettersUsed, "\n", lettersChecked)
-#test w/ soaps, spool
