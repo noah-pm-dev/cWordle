@@ -1,8 +1,18 @@
 #! /usr/bin/env -S julia --handle-signals=no
 
-using Printf, Dates, HTTP
+using Printf, Dates, Pkg
+
+try
+	using HTTP
+catch e
+	Pkg.add("HTTP")
+	using HTTP
+end
+
 
 include("getWord.jl")
+
+wd = @__DIR__
 
 function matchIndex(num, arr)
 	for i in arr
@@ -69,7 +79,7 @@ function wrongPass(input, inputPOS)
 end
 
 
-word = ['s', 'h', 'i', 'r', 'e']
+word = [char for char in getWord()]
 lettersUsed = Dict{Char, Any}()
 lettersChecked = Dict{Char, Any}()
 greenIndex = []
@@ -78,6 +88,8 @@ orangeList = Dict{Char, Bool}()
 greyList = Dict{Char, Bool}()
 letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', "\n", 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', "\n", 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 winStatus = 0
+validStatus = 0
+validList = String(read("$wd/validList.dat")) |> Meta.parse |> eval
 
 for i in letters
 	if i != "\n"
@@ -95,7 +107,27 @@ print("\n\n\n\n\n\n\n\n\n$(join(letters))\u001b[1A\u001b[1F\u001b7\u001b[8A\u001
 for i in 1:6
 	#global lettersUsed = Dict{Char, Any}()
 	#global lettersChecked = Dict{Char, Any}()
+	@label redo_input
+	print("a")
 	input = [char for char in readline()]
+	#inputCharOne = input[1]
+	for word in validList
+		if word == join(input)
+			print("e")
+			global validStatus = 1
+		end
+	end
+	if validStatus != 1 || length(input) < 5 || length(input) > 5
+		print("e")
+		print("\u001b[1F\u001b[5;31m$(join(input))")
+		sleep(1.5)
+		print("\r        \u001b[0m\u001b[10D")
+		@goto redo_input
+	end
+
+	
+
+	
 	#sleep(1)
 	print("\u001b[1F")
 	for i in word				
@@ -127,5 +159,7 @@ end
 println("\u001b8\u001b[4E")
 
 if winStatus == 1
-	println("\u001b[32m\nYou Win!\u001b[39m")
+	println("\u001b[32mYou Win!\u001b[39m")
+else
+	println("\u001b[31mYou Lose\nThe word was: $(join(word))\u001b[39m")
 end
