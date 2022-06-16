@@ -89,7 +89,8 @@ greyList = Dict{Char, Bool}()
 letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', "\n", 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', "\n", 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 winStatus = 0
 validStatus = 0
-validList = String(read("$wd/validList.dat")) |> Meta.parse |> eval
+validList = String(read("$wd/validList.dat")) |> Meta.parse |> eval # Length 10667
+iter = 0
 
 for i in letters
 	if i != "\n"
@@ -103,27 +104,27 @@ end
 print("\n\n\n\n\n\n\n\n\n$(join(letters))\u001b[1A\u001b[1F\u001b7\u001b[8A\u001b[1F")
 
 
-
 for i in 1:6
 	#global lettersUsed = Dict{Char, Any}()
 	#global lettersChecked = Dict{Char, Any}()
 	@label redo_input
-	print("a")
+	global iter = 0
 	input = [char for char in readline()]
 	#inputCharOne = input[1]
 	for word in validList
+		global iter += 1
 		if word == join(input)
-			print("e")
-			global validStatus = 1
+			break
+		end
+		if iter == 10667
+			print("\u001b[1F\u001b[5;31m$(join(input))")
+			sleep(1.5)
+			print("\r        \u001b[0m\u001b[10D")
+			@goto redo_input
+			print(iter)
 		end
 	end
-	if validStatus != 1 || length(input) < 5 || length(input) > 5
-		print("e")
-		print("\u001b[1F\u001b[5;31m$(join(input))")
-		sleep(1.5)
-		print("\r        \u001b[0m\u001b[10D")
-		@goto redo_input
-	end
+	print(iter)
 
 	
 

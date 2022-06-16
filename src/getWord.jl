@@ -1,5 +1,5 @@
 function getWord()
-    wordList = String(HTTP.get("https://raw.githubusercontent.com/HuoKnight/cWordle/master/wordList.dat").body) |> Meta.parse |> eval
+    wordList = String(read("validList.dat")) |> Meta.parse |> eval
 
     #println(wordList, "\n", length(wordList))
 
