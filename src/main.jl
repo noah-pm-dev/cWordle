@@ -9,9 +9,6 @@ catch e
 	using HTTP
 end
 
-
-include("getWord.jl")
-
 wd = @__DIR__
 
 function matchIndex(num, arr)
@@ -78,8 +75,10 @@ function wrongPass(input, inputPOS)
 	end
 end
 
-
-word = [char for char in getWord()]
+wordList = String(read("wordList.dat")) |> Meta.parse |> eval
+validList = String(read("$wd/validList.dat")) |> Meta.parse |> eval
+validList = append!(validList, wordList)
+word = "cover" #[char for char in wordList[rand(1:2315)]]
 lettersUsed = Dict{Char, Any}()
 lettersChecked = Dict{Char, Any}()
 greenIndex = []
@@ -88,8 +87,6 @@ orangeList = Dict{Char, Bool}()
 greyList = Dict{Char, Bool}()
 letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', "\n", 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', "\n", 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 winStatus = 0
-validStatus = 0
-validList = String(read("$wd/validList.dat")) |> Meta.parse |> eval # Length 10667
 iter = 0
 
 for i in letters
@@ -111,20 +108,37 @@ for i in 1:6
 	global iter = 0
 	input = [char for char in readline()]
 	#inputCharOne = input[1]
+	#validStatus = 0
 	for word in validList
 		global iter += 1
 		if word == join(input)
 			break
 		end
-		if iter == 10667
+		if iter == 12984
 			print("\u001b[1F\u001b[5;31m$(join(input))")
 			sleep(1.5)
 			print("\r        \u001b[0m\u001b[10D")
 			@goto redo_input
-			print(iter)
 		end
 	end
-	print(iter)
+	# if validStatus == 0
+	# 	for word in wordList
+	# 		if word == join(input)
+	# 			println("AAAA")
+	# 			validStatus = 1
+	# 			break
+	# 		else
+	# 			print("\u001b[1F\u001b[5;31m$(join(input))")
+	# 			sleep(1.5)
+	# 			print("\r        \u001b[0m\u001b[10D")
+	# 			@goto redo_input
+	# 			print(iter)
+	# 		end
+	# 	end
+	# end
+
+
+	#print(iter)
 
 	
 
