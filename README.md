@@ -8,7 +8,7 @@ The program must be run from within the `src` folder to be able to access the da
 
 ## How it works
 ### Output
-This is an incredibly simple program, as it makes use of ANSI escape codes to control the cursor and text output. As such, it is not very stable and there could be bugs that cause text to be printed in the wrong spot, text to be randomly deleted etc.
+This is an incredibly simple program, as it makes use of [ANSI escape codes](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797) to control the cursor and text output. As such, it is not very stable and there could be bugs that cause text to be printed in the wrong spot, text to be randomly deleted etc.
 
 This is not a safe method and shouldn't be used in real programs, this project is simply an experiment.
 
