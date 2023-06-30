@@ -1,13 +1,6 @@
 #! /usr/bin/env -S julia --handle-signals=no
 
-using Printf, Dates, Pkg
-
-try
-	using HTTP
-catch e
-	Pkg.add("HTTP")
-	using HTTP
-end
+using Printf
 
 wd = @__DIR__
 
@@ -56,7 +49,6 @@ function wrongPass(input, inputPOS)
 						continue
 					end
 				end
-				#sleep(1)
 			else
 				@printf("\u001b[100m%s\u001b[49m", input[i])
 				if greyList[input[i]] != true
@@ -67,7 +59,6 @@ function wrongPass(input, inputPOS)
 						continue
 					end
 				end
-				#sleep(1)
 			end
 		else
 			@printf("\u001b[1C")
@@ -75,10 +66,12 @@ function wrongPass(input, inputPOS)
 	end
 end
 
+print("\u001b[1J\u001b[H")
+
 wordList = String(read("wordList.dat")) |> Meta.parse |> eval
 validList = String(read("$wd/validList.dat")) |> Meta.parse |> eval
 validList = append!(validList, wordList)
-word = "cover" #[char for char in wordList[rand(1:2315)]]
+word = [char for char in wordList[rand(1:2315)]]
 lettersUsed = Dict{Char, Any}()
 lettersChecked = Dict{Char, Any}()
 greenIndex = []
@@ -102,48 +95,29 @@ print("\n\n\n\n\n\n\n\n\n$(join(letters))\u001b[1A\u001b[1F\u001b7\u001b[8A\u001
 
 
 for i in 1:6
-	#global lettersUsed = Dict{Char, Any}()
-	#global lettersChecked = Dict{Char, Any}()
 	@label redo_input
 	global iter = 0
-	input = [char for char in readline()]
-	#inputCharOne = input[1]
-	#validStatus = 0
+	input = join([char for char in readline()])
+	if length(input) != 5
+		print("\u001b[1F\u001b[5;31m$(join(input))")
+		sleep(1.5)
+		print("\u001b[1K\r\u001b[0m\u001b[10D")
+		@goto redo_input
+	end
 	for word in validList
 		global iter += 1
-		if word == join(input)
+		if word == input
+			validStatus = 1
 			break
 		end
 		if iter == 12984
-			print("\u001b[1F\u001b[5;31m$(join(input))")
+			print("\u001b[1F\u001b[5;31m$(input)")
 			sleep(1.5)
-			print("\r        \u001b[0m\u001b[10D")
+			print("\u001b[1K\r\u001b[0m\u001b[10D")
 			@goto redo_input
 		end
 	end
-	# if validStatus == 0
-	# 	for word in wordList
-	# 		if word == join(input)
-	# 			println("AAAA")
-	# 			validStatus = 1
-	# 			break
-	# 		else
-	# 			print("\u001b[1F\u001b[5;31m$(join(input))")
-	# 			sleep(1.5)
-	# 			print("\r        \u001b[0m\u001b[10D")
-	# 			@goto redo_input
-	# 			print(iter)
-	# 		end
-	# 	end
-	# end
 
-
-	#print(iter)
-
-	
-
-	
-	#sleep(1)
 	print("\u001b[1F")
 	for i in word				
 		lettersUsed[i] = 0
@@ -159,16 +133,12 @@ for i in 1:6
 		break
 	end
 
-	#println(greenIndex)
-	#sleep(1)
 	wrongPass(input, i)
 	print("\u001b8$(join(letters))\u001b[$(11 - i)F")
-	#println()
+
 	global greenIndex = []
 end
 
-
-#println(letters)
 
 
 println("\u001b8\u001b[4E")
