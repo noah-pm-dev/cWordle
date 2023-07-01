@@ -21,10 +21,14 @@ function greenPass(input, inputPOS)
 			@printf("\u001b[42m%s\u001b[49m", input[i])
 			if greenList[input[i]] != true
 				greenList[input[i]] = true
-				try
-					letters[findfirst(isequal(input[i]), letters)] = "\u001b[42m" * letters[findfirst(isequal(input[i]), letters)] * "\u001b[49m"
-				catch e
-					continue
+				for (index, letter) in enumerate(letters)
+					if letter == input[i]
+						letters[index] = "\u001b[42m" * letter * "\u001b[49m"
+					elseif occursin('[', string(letter))
+						if letter[6] == input[i]
+							letters[index] = "\u001b[42m" * input[i] * "\u001b[49m"
+						end
+					end
 				end
 			end
 		else
@@ -66,7 +70,7 @@ function wrongPass(input, inputPOS)
 	end
 end
 
-print("\u001b[1J\u001b[H")
+print("\u001b[2J\u001b[H")
 
 wordList = String(read("wordList.dat")) |> Meta.parse |> eval
 validList = String(read("$wd/validList.dat")) |> Meta.parse |> eval
@@ -89,7 +93,6 @@ for i in letters
 		greyList[i] = false
 	end
 end
-
 
 print("\n\n\n\n\n\n\n\n\n$(join(letters))\u001b[1A\u001b[1F\u001b7\u001b[8A\u001b[1F")
 
