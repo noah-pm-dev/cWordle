@@ -1,5 +1,7 @@
 #! /usr/bin/env -S julia --handle-signals=no
 
+# haha nice comments past self, you suck
+
 using Printf
 
 wd = @__DIR__
